@@ -5,7 +5,6 @@ sealed class UiState<out T> {
     data class Success<T>(val data: T) : UiState<T>()
     data class Error(val message: String) : UiState<Nothing>()
 
-    // Вспомогательные методы для Compose
     val isLoading: Boolean
         get() = this is Loading
 

@@ -10,7 +10,6 @@ class GetPhotosUseCase(
     private val repository: PhotoRepository
 ) {
 
-    // Синхронный вызов (простой)
     suspend operator fun invoke(
         page: Int = 1,
         limit: Int = 30
@@ -18,7 +17,6 @@ class GetPhotosUseCase(
         return repository.getPhotos(page, limit)
     }
 
-    // Flow версия для реактивного обновления UI
     fun invokeFlow(
         page: Int = 1,
         limit: Int = 30

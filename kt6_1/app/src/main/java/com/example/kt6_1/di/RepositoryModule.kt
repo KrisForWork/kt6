@@ -7,10 +7,8 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
 
-    // Предоставляем IO Dispatcher
     single { Dispatchers.IO }
 
-    // Связываем интерфейс с реализацией
     single<PhotoRepository> {
         PhotoRepositoryImpl(
             api = get(),

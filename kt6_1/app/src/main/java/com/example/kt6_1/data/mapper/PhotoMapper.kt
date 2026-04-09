@@ -18,7 +18,6 @@ fun PhotoDto.toDomain(): Photo {
         )
     } catch (e: Exception) {
         Log.e(TAG, "Ошибка маппинга фото ${this.id}: ${e.message}")
-        // Возвращаем фото с базовыми данными, чтобы не ломать список
         Photo(
             id = this.id,
             author = "Ошибка загрузки",
@@ -41,7 +40,6 @@ fun List<PhotoDto>.toDomain(): List<Photo> {
     }
 }
 
-// Дополнительный маппер с фильтрацией невалидных данных
 fun List<PhotoDto>.toValidDomain(): List<Photo> {
     return this.toDomain().filter { photo ->
         photo.width > 0 && photo.height > 0 && photo.downloadUrl.isNotBlank()

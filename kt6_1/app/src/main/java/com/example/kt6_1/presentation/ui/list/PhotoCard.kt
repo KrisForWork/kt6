@@ -61,7 +61,6 @@ fun PhotoCard(
             shape = RoundedCornerShape(12.dp)
         ) {
             Column {
-                // Изображение
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()

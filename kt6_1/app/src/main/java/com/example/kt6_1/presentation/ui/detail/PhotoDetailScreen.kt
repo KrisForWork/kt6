@@ -67,7 +67,6 @@ fun PhotoDetailScreen(
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
 
-    // SAF лаунчер
     val saveFileLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.CreateDocument("image/jpeg")
     ) { uri ->
@@ -77,7 +76,6 @@ fun PhotoDetailScreen(
         }
     }
 
-    // Обработка эффектов
     LaunchedEffect(Unit) {
         viewModel.effect.collectLatest { effect ->
             when (effect) {
@@ -107,7 +105,6 @@ fun PhotoDetailScreen(
                     }
                 },
                 actions = {
-                    // Исправляем smart cast - проверяем значение один раз
                     val photo = state.photo
                     if (photo != null && !state.isDownloading) {
                         IconButton(
@@ -133,7 +130,6 @@ fun PhotoDetailScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            // Сохраняем значения в локальные переменные для избежания smart cast ошибок
             val isLoading = state.isLoading
             val errorMessage = state.error
             val photo = state.photo
@@ -162,7 +158,6 @@ fun PhotoDetailScreen(
                 }
             }
 
-            // Оверлей загрузки при скачивании
             if (state.isDownloading) {
                 Box(
                     modifier = Modifier
@@ -203,7 +198,6 @@ private fun PhotoDetailContent(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Изображение
         Card(
             modifier = Modifier.fillMaxWidth(),
             elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
@@ -221,7 +215,6 @@ private fun PhotoDetailContent(
             )
         }
 
-        // Информация о фото
         Card(
             modifier = Modifier.fillMaxWidth(),
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
