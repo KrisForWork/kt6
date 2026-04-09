@@ -1,6 +1,5 @@
 package com.example.kt6_1.presentation.ui.detail
 
-import android.R
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
@@ -48,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.example.kt6_1.R
 import com.example.kt6_1.presentation.ui.common.ErrorView
 import com.example.kt6_1.presentation.ui.common.LoadingIndicator
 import kotlinx.coroutines.flow.collectLatest
@@ -117,7 +117,7 @@ fun PhotoDetailScreen(
                             }
                         ) {
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_delete),
+                                painter = painterResource(id = R.drawable.ic_download),
                                 contentDescription = "Скачать"
                             )
                         }
@@ -250,7 +250,7 @@ private fun PhotoDetailContent(
                     enabled = !isDownloading
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_delete),
+                        painter = painterResource(id = R.drawable.ic_download),
                         contentDescription = null
                     )
                     Spacer(modifier = Modifier.width(8.dp))
