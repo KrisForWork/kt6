@@ -44,9 +44,6 @@ android {
 kotlin {
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_11)
-        // Опционально можно указать версии API и языка
-        // apiVersion.set(KotlinVersion.KOTLIN_2_3)
-        // languageVersion.set(KotlinVersion.KOTLIN_2_3)
     }
 }
 
