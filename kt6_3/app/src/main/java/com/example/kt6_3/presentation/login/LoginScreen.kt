@@ -24,7 +24,6 @@ fun LoginScreen(
 
     val snackbarHostState = remember { SnackbarHostState() }
 
-    // Только показываем ошибки, не выполняем навигацию
     LaunchedEffect(loginState) {
         if (loginState is UiState.Error) {
             snackbarHostState.showSnackbar(
@@ -102,7 +101,6 @@ fun LoginScreen(
                     }
                 }
 
-                // Тестовые данные для быстрого ввода
                 Text(
                     text = "Тестовые данные: emilys / emilyspass",
                     style = MaterialTheme.typography.bodySmall,

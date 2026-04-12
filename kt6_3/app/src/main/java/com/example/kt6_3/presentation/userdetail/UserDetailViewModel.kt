@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 class UserDetailViewModel(
     private val userRepository: UserRepository,
     private val sessionManager: SessionManager,
-    private val userId: Int  // Принимаем напрямую
+    private val userId: Int
 ) : ViewModel() {
 
     private val _userState = MutableStateFlow<UiState<User>>(UiState.Loading)

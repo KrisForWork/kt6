@@ -33,7 +33,6 @@ fun UsersListScreen(
 
     val snackbarHostState = remember { SnackbarHostState() }
 
-    // Обработка ошибок
     LaunchedEffect(usersState) {
         if (usersState is UiState.Error) {
             snackbarHostState.showSnackbar(

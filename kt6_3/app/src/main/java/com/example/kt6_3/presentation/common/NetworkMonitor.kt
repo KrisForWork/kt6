@@ -36,7 +36,6 @@ class NetworkMonitor(context: Context) {
 
         connectivityManager.registerNetworkCallback(request, callback)
 
-        // Начальное состояние
         val isCurrentlyConnected = isNetworkAvailable()
         trySend(isCurrentlyConnected)
 

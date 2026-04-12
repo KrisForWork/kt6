@@ -26,7 +26,6 @@ fun UserDetailScreen(
     val userState by viewModel.userState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    // Обработка ошибок
     LaunchedEffect(userState) {
         if (userState is UiState.Error) {
             snackbarHostState.showSnackbar(
@@ -115,7 +114,6 @@ private fun UserDetailContent(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // Большой аватар
                 AsyncImage(
                     model = user.image,
                     contentDescription = "Аватар ${user.firstName}",
@@ -125,14 +123,12 @@ private fun UserDetailContent(
                     contentScale = ContentScale.Crop
                 )
 
-                // Имя и фамилия
                 Text(
                     text = "${user.firstName} ${user.lastName}",
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold
                 )
 
-                // Username
                 Surface(
                     shape = MaterialTheme.shapes.small,
                     color = MaterialTheme.colorScheme.primaryContainer
@@ -147,7 +143,6 @@ private fun UserDetailContent(
 
                 Divider(modifier = Modifier.padding(vertical = 8.dp))
 
-                // Информационные поля
                 InfoRow(label = "ID", value = user.id.toString())
                 InfoRow(label = "Email", value = user.email)
                 InfoRow(label = "Имя", value = user.firstName)
@@ -157,10 +152,8 @@ private fun UserDetailContent(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Кнопка выхода внизу экрана
         Button(
             onClick = {
-                // Логика выхода в ViewModel
             },
             modifier = Modifier
                 .fillMaxWidth()

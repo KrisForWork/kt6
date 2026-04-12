@@ -25,7 +25,6 @@ fun RequireAuth(
     when (authState) {
         is AuthState.Authenticated -> content()
         is AuthState.Unauthenticated -> {
-            // Показываем пустой экран или загрузку пока идет редирект
         }
     }
 }
