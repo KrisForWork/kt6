@@ -46,14 +46,16 @@ fun Application.configureSecurity() {
 private fun isValidIssuerForDevelopment(issuer: String?): Boolean {
     if (issuer == null) return false
 
+    // Список допустимых issuer для разработки
     val allowedIssuers = listOf(
         "http://0.0.0.0:8080/",
         "http://localhost:8080/",
-        "http://10.0.2.2:8080/",
-        "http://10.141.151.211:8080/",
+        "http://10.0.2.2:8080/",        // Эмулятор Android
+        "http://10.141.151.211:8080/",   // Ваш текущий IP
         "http://127.0.0.1:8080/"
     )
 
+    // Также разрешаем любой локальный IP
     return issuer in allowedIssuers ||
             issuer.matches(Regex("http://(192\\.168\\..*|10\\..*|172\\.(1[6-9]|2[0-9]|3[0-1])\\..*):8080/"))
 }
