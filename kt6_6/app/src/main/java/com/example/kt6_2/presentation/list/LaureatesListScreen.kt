@@ -32,14 +32,12 @@ fun LaureatesListScreen(
             TopAppBar(
                 title = { Text("Nobel Prize Laureates") },
                 actions = {
-                    // Кнопка избранного
                     IconButton(onClick = onFavoritesClick) {
                         Icon(
                             Icons.Default.Favorite,
                             contentDescription = "Favorites"
                         )
                     }
-                    // Кнопка выхода
                     IconButton(onClick = onLogoutClick) {
                         Icon(
                             Icons.Default.Lock,
@@ -60,7 +58,6 @@ fun LaureatesListScreen(
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp)
         ) {
-            // Filter section
             FilterSection(
                 viewModel = viewModel,
                 modifier = Modifier.padding(vertical = 8.dp)
@@ -68,7 +65,6 @@ fun LaureatesListScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Content based on state
             when (val currentState = state) {
                 is LaureatesListState.Loading -> {
                     Box(

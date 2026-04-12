@@ -1,4 +1,3 @@
-// app/src/main/java/com/example/kt6_2/MainActivity.kt
 package com.example.kt6_2
 
 import android.os.Bundle

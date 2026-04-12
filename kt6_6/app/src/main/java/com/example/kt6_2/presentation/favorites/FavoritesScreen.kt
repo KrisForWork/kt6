@@ -1,4 +1,3 @@
-// app/src/main/java/com/example/kt6_2/presentation/favorites/FavoritesScreen.kt
 package com.example.kt6_2.presentation.favorites
 
 import androidx.compose.foundation.clickable

@@ -1,4 +1,3 @@
-// app/src/main/java/com/example/kt6_2/data/repository/NobelRepositoryImpl.kt
 package com.example.kt6_2.data.repository
 
 import com.example.kt6_2.data.api.service.NobelApiService

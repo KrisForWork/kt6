@@ -1,4 +1,3 @@
-// app/src/main/java/com/example/kt6_2/data/api/service/AuthApiService.kt
 package com.example.kt6_2.data.api.service
 
 import com.example.kt6_2.data.api.models.LoginRequest

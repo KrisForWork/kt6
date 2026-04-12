@@ -34,7 +34,7 @@ fun LaureateDto.toDomain(): Laureate {
         surname = surname,
         fullName = computedFullName,
         motivation = motivation,
-        portion = portion,  // ← только portion
+        portion = portion,
         portraitUrl = portraitUrl
     )
 }

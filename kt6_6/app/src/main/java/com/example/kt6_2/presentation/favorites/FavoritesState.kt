@@ -1,4 +1,3 @@
-// app/src/main/java/com/example/kt6_2/presentation/favorites/FavoritesState.kt
 package com.example.kt6_2.presentation.favorites
 
 import com.example.kt6_2.domain.model.NobelPrize

@@ -1,4 +1,3 @@
-// app/src/main/java/com/example/kt6_2/data/repository/AuthRepositoryImpl.kt
 package com.example.kt6_2.data.repository
 
 import android.util.Log

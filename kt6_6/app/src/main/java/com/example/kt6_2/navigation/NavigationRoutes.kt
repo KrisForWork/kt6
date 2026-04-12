@@ -1,4 +1,3 @@
-// app/src/main/java/com/example/kt6_2/navigation/NavigationRoutes.kt
 package com.example.kt6_2.navigation
 
 sealed class Screen(val route: String) {

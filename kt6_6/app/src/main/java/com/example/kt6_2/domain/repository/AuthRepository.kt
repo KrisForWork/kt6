@@ -1,4 +1,3 @@
-// app/src/main/java/com/example/kt6_2/domain/repository/AuthRepository.kt
 package com.example.kt6_2.domain.repository
 
 import com.example.kt6_2.domain.model.User

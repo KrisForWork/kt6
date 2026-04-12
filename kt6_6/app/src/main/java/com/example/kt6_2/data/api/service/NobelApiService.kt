@@ -30,26 +30,21 @@ class NobelApiServiceImpl(
 
     override suspend fun fetchAllPrizes(year: Int?, category: String?): List<NobelPrizeDto> {
         return try {
-            // Определяем URL в зависимости от фильтров
             val url = when {
                 year != null && category != null -> {
-                    // Если указаны оба - получаем конкретную премию
                     android.util.Log.d("NobelApi", "Fetching specific prize: $year/$category")
                     val prize = fetchPrizeByYearAndCategory(year.toString(), category)
                     return if (prize != null) listOf(prize) else emptyList()
                 }
                 year != null -> {
-                    // Только год
                     android.util.Log.d("NobelApi", "Fetching prizes for year: $year")
                     "$baseUrl/prizes/$year"
                 }
                 category != null -> {
-                    // Только категория
                     android.util.Log.d("NobelApi", "Fetching prizes for category: $category")
                     "$baseUrl/prizes/category/$category"
                 }
                 else -> {
-                    // Без фильтров - все премии
                     android.util.Log.d("NobelApi", "Fetching all prizes")
                     "$baseUrl/prizes"
                 }
@@ -59,16 +54,15 @@ class NobelApiServiceImpl(
             android.util.Log.d("NobelApi", "URL: $url")
             android.util.Log.d("NobelApi", "Filters: year=$year, category=$category")
 
-            // ✅ ЯВНО ДОБАВЛЯЕМ ТОКЕН
             val token = tokenManager.getToken()
-            android.util.Log.d("NobelApi", "🔑 Token for request: ${token?.take(30)}...")
+            android.util.Log.d("NobelApi", "Token for request: ${token?.take(30)}...")
 
             val response = client.get(url) {
                 token?.let {
                     headers.append(HttpHeaders.Authorization, "Bearer $it")
-                    android.util.Log.d("NobelApi", "✅ Added Authorization header")
+                    android.util.Log.d("NobelApi", "Added Authorization header")
                 } ?: run {
-                    android.util.Log.d("NobelApi", "⚠️ No token available for request")
+                    android.util.Log.d("NobelApi", "⚠No token available for request")
                 }
             }
 
@@ -105,14 +99,14 @@ class NobelApiServiceImpl(
             android.util.Log.d("NobelApi", "fetchPrizeByYearAndCategory: $year/$category")
 
             val token = tokenManager.getToken()
-            android.util.Log.d("NobelApi", "🔑 Token for details: ${token?.take(30)}...")
+            android.util.Log.d("NobelApi", "Token for details: ${token?.take(30)}...")
 
             val response = client.get("$baseUrl/prizes/$year/$category") {
                 token?.let {
                     headers.append(HttpHeaders.Authorization, "Bearer $it")
-                    android.util.Log.d("NobelApi", "✅ Added Authorization header for details")
+                    android.util.Log.d("NobelApi", "Added Authorization header for details")
                 } ?: run {
-                    android.util.Log.d("NobelApi", "⚠️ No token available for details")
+                    android.util.Log.d("NobelApi", "No token available for details")
                 }
             }
 

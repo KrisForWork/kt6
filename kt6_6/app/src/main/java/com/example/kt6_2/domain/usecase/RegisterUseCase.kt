@@ -1,4 +1,3 @@
-// app/src/main/java/com/example/kt6_2/domain/usecase/RegisterUseCase.kt
 package com.example.kt6_2.domain.usecase
 
 import com.example.kt6_2.domain.repository.AuthRepository
@@ -11,7 +10,6 @@ class RegisterUseCase(
         username: String,
         password: String
     ): RegisterResult {
-        // Валидация на уровне use case
         if (username.length < 3) {
             return RegisterResult.ValidationError("Username must be at least 3 characters")
         }

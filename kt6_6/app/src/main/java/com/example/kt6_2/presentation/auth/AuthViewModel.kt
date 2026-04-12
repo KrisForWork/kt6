@@ -1,4 +1,3 @@
-// app/src/main/java/com/example/kt6_2/presentation/auth/AuthViewModel.kt
 package com.example.kt6_2.presentation.auth
 
 import androidx.lifecycle.ViewModel

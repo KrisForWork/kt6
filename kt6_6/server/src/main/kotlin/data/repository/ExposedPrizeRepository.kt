@@ -32,7 +32,7 @@ class ExposedPrizeRepository : PrizeRepository {
         val nameParts = fullName.split(" ")
 
         return Laureate(
-            id = row[LaureatesTable.id].toString(),  // ← Обычный Table, можно без .value
+            id = row[LaureatesTable.id].toString(),
             firstname = nameParts.firstOrNull() ?: "",
             surname = nameParts.drop(1).joinToString(" ").ifEmpty { null },
             fullName = fullName,

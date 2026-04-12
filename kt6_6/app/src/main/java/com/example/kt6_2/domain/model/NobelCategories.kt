@@ -1,4 +1,3 @@
-// app/src/main/java/com/example/kt6_2/domain/model/NobelCategories.kt
 package com.example.kt6_2.domain.model
 
 object NobelCategories {

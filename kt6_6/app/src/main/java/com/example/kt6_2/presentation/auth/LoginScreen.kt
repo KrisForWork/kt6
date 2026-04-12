@@ -1,4 +1,3 @@
-// app/src/main/java/com/example/kt6_2/presentation/auth/LoginScreen.kt
 package com.example.kt6_2.presentation.auth
 
 import androidx.compose.foundation.layout.*
@@ -21,11 +20,9 @@ fun AuthScreen(
 
     val currentState = if (isLoginMode) loginState else registerState
 
-    // Добавьте remember для сохранения значений при рекомпозиции
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    // Сбрасываем состояние при переключении режима
     LaunchedEffect(isLoginMode) {
         viewModel.resetStates()
     }

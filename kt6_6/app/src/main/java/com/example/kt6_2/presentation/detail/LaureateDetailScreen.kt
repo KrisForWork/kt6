@@ -9,7 +9,6 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -43,7 +42,6 @@ fun LaureateDetailScreen(
                     }
                 },
                 actions = {
-                    // КНОПКА ИЗБРАННОГО
                     IconButton(
                         onClick = onFavoriteClick,
                         enabled = !isFavoriteLoading
@@ -77,7 +75,6 @@ fun LaureateDetailScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Prize info card
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
@@ -88,7 +85,6 @@ fun LaureateDetailScreen(
                     modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    // Исправлено: используем category с заглавной буквы
                     val categoryDisplay = prize.category?.replaceFirstChar { it.uppercase() } ?: "Unknown"
                     val yearDisplay = prize.awardYear ?: "Unknown"
 
@@ -117,7 +113,6 @@ fun LaureateDetailScreen(
                 }
             }
 
-            // Personal info card
             Card(
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -125,7 +120,6 @@ fun LaureateDetailScreen(
                     modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    // Portion (доля премии)
                     laureate.portion?.let { portion ->
                         val shareText = when (portion) {
                             "1" -> "Full prize"
@@ -140,7 +134,6 @@ fun LaureateDetailScreen(
                         Divider()
                     }
 
-                    // Motivation
                     val motivationText = prize.motivation ?: laureate.motivation
                     motivationText?.takeIf { it.isNotEmpty() }?.let { motivation ->
                         Column {
@@ -159,7 +152,6 @@ fun LaureateDetailScreen(
                 }
             }
 
-            // Additional info - другие лауреаты этой же премии
             if (prize.laureates.size > 1) {
                 Card(
                     modifier = Modifier.fillMaxWidth(),

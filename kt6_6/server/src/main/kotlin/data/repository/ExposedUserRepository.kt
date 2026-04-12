@@ -58,7 +58,7 @@ class ExposedUserRepository : UserRepository {
             it[UsersTable.username] = username
             it[UsersTable.passwordHash] = passwordHash
             it[UsersTable.role] = role
-            it[UsersTable.createdAt] = now  // ← kotlinx.datetime.LocalDateTime
+            it[UsersTable.createdAt] = now
         }
 
         insertStatement.resultedValues?.singleOrNull()?.let { rowToUser(it) }
@@ -89,7 +89,7 @@ class ExposedUserRepository : UserRepository {
             UserPrizesTable.insert {
                 it[UserPrizesTable.userId] = userId
                 it[UserPrizesTable.prizeId] = prizeId
-                it[UserPrizesTable.addedAt] = now  // ← kotlinx.datetime.LocalDateTime
+                it[UserPrizesTable.addedAt] = now
             }
         }
         true

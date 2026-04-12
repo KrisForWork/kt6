@@ -1,4 +1,3 @@
-// app/src/main/java/com/example/kt6_2/presentation/list/LaureatesListViewModel.kt
 package com.example.kt6_2.presentation.list
 
 import android.util.Log
@@ -35,7 +34,7 @@ class LaureatesListViewModel(
     val categoryDropdownExpanded: StateFlow<Boolean> = _categoryDropdownExpanded.asStateFlow()
 
     private var searchJob: Job? = null
-    private var hasLoadedData = false  // Флаг для отслеживания загрузки
+    private var hasLoadedData = false
 
     val categories = NobelCategories.ALL
     val categoryDisplayNames = NobelCategories.DISPLAY_NAMES
@@ -44,11 +43,9 @@ class LaureatesListViewModel(
         get() = Calendar.getInstance().get(Calendar.YEAR)
 
     init {
-        // НЕ вызываем loadData() в init - ждём когда пользователь авторизуется
         Log.d("LaureatesVM", "ViewModel created, waiting for auth")
     }
 
-    // Метод для загрузки данных после авторизации
     fun loadInitialData() {
         if (!hasLoadedData) {
             Log.d("LaureatesVM", "loadInitialData called")

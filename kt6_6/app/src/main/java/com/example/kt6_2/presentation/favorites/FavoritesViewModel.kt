@@ -1,4 +1,3 @@
-// app/src/main/java/com/example/kt6_2/presentation/favorites/FavoritesViewModel.kt
 package com.example.kt6_2.presentation.favorites
 
 import androidx.lifecycle.ViewModel
@@ -34,7 +33,6 @@ class FavoritesViewModel(
             when (val result = getFavoritesUseCase()) {
                 is NetworkResult.Success -> {
                     _state.value = FavoritesState.Success(result.data)
-                    // Обновляем карту избранных
                     val map = result.data.associate { prize ->
                         (prize.id ?: 0) to true
                     }
@@ -59,7 +57,6 @@ class FavoritesViewModel(
                     _isFavoriteMap.value = _isFavoriteMap.value + (prizeId to true)
                 }
                 else -> {
-                    // Ошибка - можно показать уведомление
                 }
             }
 
@@ -74,7 +71,6 @@ class FavoritesViewModel(
             when (removeFavoriteUseCase(prizeId)) {
                 is NetworkResult.Success -> {
                     _isFavoriteMap.value = _isFavoriteMap.value - prizeId
-                    // Если на экране избранного - обновляем список
                     val currentState = _state.value
                     if (currentState is FavoritesState.Success) {
                         val updatedPrizes = currentState.prizes.filter { it.id != prizeId }
@@ -82,7 +78,6 @@ class FavoritesViewModel(
                     }
                 }
                 else -> {
-                    // Ошибка
                 }
             }
 

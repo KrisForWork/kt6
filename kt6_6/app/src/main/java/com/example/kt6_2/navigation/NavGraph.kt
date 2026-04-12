@@ -1,4 +1,3 @@
-// app/src/main/java/com/example/kt6_2/navigation/NavGraph.kt
 package com.example.kt6_2.navigation
 
 import androidx.compose.runtime.Composable
@@ -41,7 +40,6 @@ fun NavGraph(
             val loginState by authViewModel.loginState.collectAsState()
             val registerState by authViewModel.registerState.collectAsState()
 
-            // Проверяем при запуске - если уже залогинен, идем на список
             LaunchedEffect(Unit) {
                 if (getCurrentUserUseCase.isLoggedIn()) {
                     android.util.Log.d("NavGraph", "Already logged in, navigating to list")
@@ -51,12 +49,10 @@ fun NavGraph(
                 }
             }
 
-            // Отслеживаем успешную авторизацию
             LaunchedEffect(loginState, registerState) {
                 val isSuccess = loginState is AuthState.Success || registerState is AuthState.Success
                 if (isSuccess) {
                     android.util.Log.d("NavGraph", "Auth success, navigating to list")
-                    // Загружаем избранное при входе
                     favoritesViewModel.loadFavorites()
                     navController.navigate(Screen.List.route) {
                         popUpTo(Screen.Auth.route) { inclusive = true }
@@ -82,7 +78,6 @@ fun NavGraph(
             } else {
                 android.util.Log.d("NavGraph", "Showing list screen")
 
-                // Загружаем данные только один раз
                 LaunchedEffect(Unit) {
                     listViewModel.loadInitialData()
                 }
@@ -99,19 +94,17 @@ fun NavGraph(
                     onLogoutClick = {
                         authViewModel.logout()
                         navController.navigate(Screen.Auth.route) {
-                            popUpTo(0) { inclusive = true } // Очищаем весь стек
+                            popUpTo(0) { inclusive = true }
                         }
                     }
                 )
             }
         }
 
-        // Экран избранного
         composable(Screen.Favorites.route) {
             FavoritesScreen(
                 viewModel = favoritesViewModel,
                 onPrizeClick = { prize ->
-                    // При клике на премию в избранном - переходим к первому лауреату
                     prize.laureates.firstOrNull()?.let { laureate ->
                         val data = DetailScreenData(prize, laureate)
                         navController.navigate(Screen.Detail.createRoute(data))
@@ -123,7 +116,6 @@ fun NavGraph(
             )
         }
 
-        // Экран деталей
         composable(
             route = Screen.Detail.route,
             arguments = listOf(

@@ -1,4 +1,3 @@
-// app/src/main/java/com/example/kt6_2/domain/model/User.kt
 package com.example.kt6_2.domain.model
 
 data class User(

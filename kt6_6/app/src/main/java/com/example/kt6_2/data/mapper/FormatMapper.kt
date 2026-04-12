@@ -1,4 +1,3 @@
-// app/src/main/java/com/example/kt6_2/data/mapper/FormatMapper.kt
 package com.example.kt6_2.data.mapper
 
 import com.example.kt6_2.domain.model.Laureate

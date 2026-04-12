@@ -1,4 +1,3 @@
-// app/src/main/java/com/example/kt6_2/domain/usecase/GetFavoritesUseCase.kt
 package com.example.kt6_2.domain.usecase
 
 import com.example.kt6_2.domain.model.NobelPrize

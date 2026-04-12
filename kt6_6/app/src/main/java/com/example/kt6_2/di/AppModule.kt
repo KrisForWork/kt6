@@ -1,4 +1,3 @@
-// app/src/main/java/com/example/kt6_2/di/AppModule.kt
 package com.example.kt6_2.di
 
 import android.content.Context
@@ -104,7 +103,6 @@ object AppModule {
         RemoveFavoriteUseCase(favoritesRepository)
     }
 
-    // ViewModel Factories
     fun provideLaureatesListViewModelFactory(): ViewModelProvider.Factory {
         return object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")

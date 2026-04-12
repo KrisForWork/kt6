@@ -1,4 +1,3 @@
-// app/src/main/java/com/example/kt6_2/data/api/service/FavoritesApiService.kt
 package com.example.kt6_2.data.api.service
 
 import com.example.kt6_2.data.api.models.NobelPrizeDto
@@ -88,7 +87,6 @@ class FavoritesApiServiceImpl(
             val summaries = getFavorites()
             android.util.Log.d("FavoritesApi", "Got ${summaries.size} favorite summaries")
 
-            // Получаем полные данные для каждой премии
             summaries.mapNotNull { summary ->
                 try {
                     fetchPrizeDetails(summary.awardYear, summary.category)

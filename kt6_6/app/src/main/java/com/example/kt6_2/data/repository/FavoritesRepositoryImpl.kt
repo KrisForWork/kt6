@@ -1,4 +1,3 @@
-// app/src/main/java/com/example/kt6_2/data/repository/FavoritesRepositoryImpl.kt
 package com.example.kt6_2.data.repository
 
 import com.example.kt6_2.data.api.service.FavoritesApiService
@@ -26,7 +25,6 @@ class FavoritesRepositoryImpl(
                 val prizes = apiService.getFullFavoritePrizes()
                 val domainPrizes = prizes.map { it.toDomain() }
 
-                // Обновляем кэш ID избранных
                 _favoriteIds.value = domainPrizes.mapNotNull { it.id }.toSet()
 
                 domainPrizes
@@ -62,11 +60,9 @@ class FavoritesRepositoryImpl(
         return prizeId in _favoriteIds.value
     }
 
-    // Для инициализации кэша при старте
     suspend fun loadFavoriteIds() {
         try {
             val summaries = apiService.getFavorites()
-            // У нас нет ID в summary, нужно получить полные данные
             val prizes = apiService.getFullFavoritePrizes()
             _favoriteIds.value = prizes.mapNotNull { it.id }.toSet()
         } catch (e: Exception) {

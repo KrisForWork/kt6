@@ -57,7 +57,6 @@ object NetworkModule {
 
             defaultRequest {
                 contentType(ContentType.Application.Json)
-                // Токен будет добавляться в каждом сервисе явно
             }
         }
     }

@@ -40,12 +40,12 @@ object DatabaseFactory {
             )
         }
 
-        println("✅ Database connected and tables created!")
+        println("Database connected and tables created!")
     }
 
     fun shutdown() {
         dataSource.close()
-        println("🔌 Database connection closed")
+        println("Database connection closed")
     }
 }
 

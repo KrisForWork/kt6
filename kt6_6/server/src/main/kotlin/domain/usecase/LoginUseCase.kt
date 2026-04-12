@@ -22,7 +22,7 @@ class LoginUseCase(
                 token = jwtTokenService.generateToken(
                     username = username,
                     role = user.role,
-                    userId = user.id ?: 0  // ← Передаём реальный userId
+                    userId = user.id ?: 0
                 ),
                 username = username,
                 role = user.role
