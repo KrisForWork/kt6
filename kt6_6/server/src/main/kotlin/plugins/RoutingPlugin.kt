@@ -5,7 +5,6 @@ import com.example.data.repository.ExposedUserRepository
 import com.example.domain.usecase.*
 import com.example.models.dto.*
 import com.example.security.JwtTokenService
-import com.example.security.PasswordHasher
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -47,7 +46,6 @@ fun Application.configureRouting() {
         }
 
         route("/auth") {
-
             post("/register") {
                 val request = call.receive<RegisterRequest>()
 
@@ -123,7 +121,6 @@ fun Application.configureRouting() {
         authenticate("auth-jwt") {
 
             route("/users/me") {
-
                 get {
                     val userId = call.getUserId() ?: return@get call.respond(
                         HttpStatusCode.Unauthorized,
@@ -157,9 +154,10 @@ fun Application.configureRouting() {
                     )
 
                     val favorites = getUserFavoritesUseCase(userId)
-                    val summaries = favorites.map { it.toSummaryResponse() }
-
-                    call.respond(HttpStatusCode.OK, summaries)
+                    val fullFavorites = favorites.mapNotNull { prize ->
+                        prize.id?.let { prizeRepository.findPrizeById(it) }
+                    }
+                    call.respond(HttpStatusCode.OK, fullFavorites)
                 }
 
                 post("/prizes/{prizeId}") {
@@ -219,24 +217,29 @@ fun Application.configureRouting() {
 
             route("/prizes") {
 
+                // ✅ НОВЫЙ ЭНДПОИНТ - возвращает полные данные
+                get("/full") {
+                    val prizes = prizeRepository.getAllPrizes()  // ← уже с лауреатами!
+                    call.respond(HttpStatusCode.OK, prizes)
+                }
+
+                // Старый эндпоинт для обратной совместимости (summary)
                 get {
-                    val prizes = getPrizesUseCase()
+                    val prizes = prizeRepository.getAllPrizes()
                     val summaries = prizes.map { it.toSummaryResponse() }
                     call.respond(HttpStatusCode.OK, summaries)
                 }
 
                 get("/{year}") {
                     val year = call.parameters["year"] ?: return@get call.respond(HttpStatusCode.BadRequest, "Year required")
-                    val prizes = getPrizesUseCase().filter { it.awardYear == year }
-                    val summaries = prizes.map { it.toSummaryResponse() }
-                    call.respond(HttpStatusCode.OK, summaries)
+                    val prizes = prizeRepository.searchPrizes(year = year)
+                    call.respond(HttpStatusCode.OK, prizes)
                 }
 
                 get("/category/{category}") {
                     val category = call.parameters["category"] ?: return@get call.respond(HttpStatusCode.BadRequest, "Category required")
-                    val prizes = getPrizesUseCase().filter { it.category.equals(category, ignoreCase = true) }
-                    val summaries = prizes.map { it.toSummaryResponse() }
-                    call.respond(HttpStatusCode.OK, summaries)
+                    val prizes = prizeRepository.searchPrizes(category = category)
+                    call.respond(HttpStatusCode.OK, prizes)
                 }
 
                 get("/{year}/{category}") {
@@ -251,12 +254,21 @@ fun Application.configureRouting() {
                             ErrorResponse("Bad Request", "Category parameter is required")
                         )
 
-                    val prize = getPrizeByYearAndCategoryUseCase(year, category)
+                    val prize = prizeRepository.findPrizeByYearAndCategory(year, category)
 
                     if (prize != null) {
-                        val laureates = prizeRepository.getLaureates(prize.id!!)
-                        val fullPrize = prize.copy(laureates = laureates)
-                        call.respond(HttpStatusCode.OK, fullPrize)
+                        val fullPrize = prizeRepository.findPrizeById(prize.id!!)
+                        if (fullPrize != null) {
+                            call.respond(HttpStatusCode.OK, fullPrize)
+                        } else {
+                            call.respond(
+                                HttpStatusCode.NotFound,
+                                ErrorResponse(
+                                    "Not Found",
+                                    "Prize for year $year and category $category not found"
+                                )
+                            )
+                        }
                     } else {
                         call.respond(
                             HttpStatusCode.NotFound,
@@ -271,7 +283,6 @@ fun Application.configureRouting() {
         }
     }
 }
-
 
 private fun ApplicationCall.getUserId(): Int? {
     val principal = principal<JWTPrincipal>() ?: return null

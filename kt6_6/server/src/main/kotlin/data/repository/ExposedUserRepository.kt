@@ -1,9 +1,11 @@
 package com.example.data.repository
 
 import com.example.data.database.dbQuery
+import com.example.data.database.tables.LaureatesTable
 import com.example.data.database.tables.PrizesTable
 import com.example.data.database.tables.UserPrizesTable
 import com.example.data.database.tables.UsersTable
+import com.example.domain.model.Laureate
 import com.example.domain.model.NobelPrize
 import com.example.domain.model.User
 import com.example.domain.repository.UserRepository
@@ -33,7 +35,25 @@ class ExposedUserRepository : UserRepository {
             fullName = row[PrizesTable.fullName],
             motivation = row[PrizesTable.motivation],
             detailLink = row[PrizesTable.detailLink],
-            laureates = emptyList()
+            prizeAmount = row[PrizesTable.prizeAmount],
+            prizeAmountAdjusted = row[PrizesTable.prizeAmountAdjusted],
+            dateAwarded = row[PrizesTable.dateAwarded],
+            laureates = emptyList()  // ← Будет заполнено позже
+        )
+    }
+
+    private fun rowToLaureate(row: ResultRow): Laureate {
+        val fullName = row[LaureatesTable.fullName]
+        val nameParts = fullName.split(" ")
+
+        return Laureate(
+            id = row[LaureatesTable.id].toString(),
+            firstname = nameParts.firstOrNull() ?: "",
+            surname = nameParts.drop(1).joinToString(" ").ifEmpty { null },
+            fullName = fullName,
+            motivation = row[LaureatesTable.motivation] ?: "",
+            portion = row[LaureatesTable.portion],
+            portraitUrl = row[LaureatesTable.portraitUrl]
         )
     }
 
@@ -58,7 +78,7 @@ class ExposedUserRepository : UserRepository {
             it[UsersTable.username] = username
             it[UsersTable.passwordHash] = passwordHash
             it[UsersTable.role] = role
-            it[UsersTable.createdAt] = now  // ← kotlinx.datetime.LocalDateTime
+            it[UsersTable.createdAt] = now
         }
 
         insertStatement.resultedValues?.singleOrNull()?.let { rowToUser(it) }
@@ -68,6 +88,14 @@ class ExposedUserRepository : UserRepository {
         (PrizesTable innerJoin UserPrizesTable)
             .selectAll().where { UserPrizesTable.userId eq userId }
             .map { rowToPrize(it) }
+            .map { prize ->
+                // ✅ Загружаем лауреатов для каждой премии
+                val laureates = LaureatesTable
+                    .selectAll()
+                    .where { LaureatesTable.prizeId eq prize.id!! }
+                    .map { rowToLaureate(it) }
+                prize.copy(laureates = laureates)
+            }
     }
 
     override suspend fun getFavoriteIds(userId: Int): List<Int> = dbQuery {
@@ -89,7 +117,7 @@ class ExposedUserRepository : UserRepository {
             UserPrizesTable.insert {
                 it[UserPrizesTable.userId] = userId
                 it[UserPrizesTable.prizeId] = prizeId
-                it[UserPrizesTable.addedAt] = now  // ← kotlinx.datetime.LocalDateTime
+                it[UserPrizesTable.addedAt] = now
             }
         }
         true
