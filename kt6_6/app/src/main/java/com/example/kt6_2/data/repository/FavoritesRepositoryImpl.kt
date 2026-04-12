@@ -23,9 +23,12 @@ class FavoritesRepositoryImpl(
     override suspend fun getFavorites(): NetworkResult<List<NobelPrize>> {
         return withContext(Dispatchers.IO) {
             safeApiCall {
-                val prizes = apiService.getFavorites()
+                val prizes = apiService.getFullFavoritePrizes()
                 val domainPrizes = prizes.map { it.toDomain() }
+
+                // Обновляем кэш ID избранных
                 _favoriteIds.value = domainPrizes.mapNotNull { it.id }.toSet()
+
                 domainPrizes
             }
         }
@@ -59,12 +62,15 @@ class FavoritesRepositoryImpl(
         return prizeId in _favoriteIds.value
     }
 
+    // Для инициализации кэша при старте
     suspend fun loadFavoriteIds() {
         try {
-            val prizes = apiService.getFavorites()
+            val summaries = apiService.getFavorites()
+            // У нас нет ID в summary, нужно получить полные данные
+            val prizes = apiService.getFullFavoritePrizes()
             _favoriteIds.value = prizes.mapNotNull { it.id }.toSet()
         } catch (e: Exception) {
-            android.util.Log.e("FavoritesRepo", "Error loading favorites: ${e.message}")
+            android.util.Log.e("FavoritesRepo", "Error loading favorite IDs: ${e.message}")
         }
     }
 }

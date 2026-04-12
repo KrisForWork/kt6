@@ -55,6 +55,7 @@ private fun isValidIssuerForDevelopment(issuer: String?): Boolean {
         "http://127.0.0.1:8080/"
     )
 
+    // Также разрешаем любой локальный IP
     return issuer in allowedIssuers ||
             issuer.matches(Regex("http://(192\\.168\\..*|10\\..*|172\\.(1[6-9]|2[0-9]|3[0-1])\\..*):8080/"))
 }
