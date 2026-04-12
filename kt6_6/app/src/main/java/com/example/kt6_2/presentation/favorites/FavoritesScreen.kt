@@ -84,12 +84,20 @@ fun FavoritesScreen(
                         ) {
                             items(
                                 items = currentState.prizes,
-                                key = { it.id ?: it.awardYear + it.category }
+                                key = { it.id ?: "${it.awardYear}_${it.category}" }
                             ) { prize ->
                                 FavoritePrizeCard(
                                     prize = prize,
                                     isRemoving = prize.id in operationInProgress,
-                                    onClick = { onPrizeClick(prize) },
+                                    onClick = {
+                                        // ✅ Проверяем, есть ли лауреаты
+                                        if (prize.laureates.isNotEmpty()) {
+                                            onPrizeClick(prize)
+                                        } else {
+                                            // Если лауреатов нет - показываем сообщение
+                                            android.util.Log.d("FavoritesScreen", "No laureates for prize ${prize.id}")
+                                        }
+                                    },
                                     onRemove = { prizeId ->
                                         prize.id?.let { viewModel.removeFavorite(it) }
                                     }
@@ -158,7 +166,10 @@ fun FavoritePrizeCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick),
+            .clickable(
+                enabled = prize.laureates.isNotEmpty(),  // ✅ Блокируем клик если нет лауреатов
+                onClick = onClick
+            ),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
@@ -193,6 +204,14 @@ fun FavoritePrizeCard(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
+
+                if (prize.laureates.isEmpty()) {
+                    Text(
+                        text = "No laureate data available",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
             }
 
             IconButton(

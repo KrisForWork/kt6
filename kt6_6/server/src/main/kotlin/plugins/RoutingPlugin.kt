@@ -154,7 +154,10 @@ fun Application.configureRouting() {
                     )
 
                     val favorites = getUserFavoritesUseCase(userId)
-                    call.respond(HttpStatusCode.OK, favorites)
+                    val fullFavorites = favorites.mapNotNull { prize ->
+                        prize.id?.let { prizeRepository.findPrizeById(it) }
+                    }
+                    call.respond(HttpStatusCode.OK, fullFavorites)
                 }
 
                 post("/prizes/{prizeId}") {
@@ -254,7 +257,6 @@ fun Application.configureRouting() {
                     val prize = prizeRepository.findPrizeByYearAndCategory(year, category)
 
                     if (prize != null) {
-                        // ✅ ИСПРАВЛЕНО: проверяем что fullPrize не null
                         val fullPrize = prizeRepository.findPrizeById(prize.id!!)
                         if (fullPrize != null) {
                             call.respond(HttpStatusCode.OK, fullPrize)

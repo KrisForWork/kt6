@@ -5,7 +5,6 @@ import com.example.kt6_2.data.auth.TokenManager
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
-import io.ktor.client.request.headers
 import io.ktor.http.HttpHeaders
 
 interface NobelApiService {
@@ -30,48 +29,41 @@ class NobelApiServiceImpl(
         return try {
             val url = when {
                 year != null && category != null -> {
-                    android.util.Log.d("NobelApi", "Fetching specific prize: $year/$category")
+                    android.util.Log.d("NobelApi", "Request: GET /prizes/$year/$category")
                     val prize = fetchPrizeByYearAndCategory(year.toString(), category)
                     return if (prize != null) listOf(prize) else emptyList()
                 }
                 year != null -> {
-                    android.util.Log.d("NobelApi", "Fetching prizes for year: $year")
+                    android.util.Log.d("NobelApi", "Request: GET /prizes/$year")
                     "$baseUrl/prizes/$year"
                 }
                 category != null -> {
-                    android.util.Log.d("NobelApi", "Fetching prizes for category: $category")
+                    android.util.Log.d("NobelApi", "Request: GET /prizes/category/$category")
                     "$baseUrl/prizes/category/$category"
                 }
                 else -> {
-                    // ✅ ИСПОЛЬЗУЕМ НОВЫЙ ЭНДПОИНТ /full
-                    android.util.Log.d("NobelApi", "Fetching all prizes (FULL)")
+                    android.util.Log.d("NobelApi", "Request: GET /prizes/full")
                     "$baseUrl/prizes/full"
                 }
             }
 
-            android.util.Log.d("NobelApi", "========== REQUEST START ==========")
-            android.util.Log.d("NobelApi", "URL: $url")
-            android.util.Log.d("NobelApi", "Filters: year=$year, category=$category")
-
             val token = tokenManager.getToken()
-            android.util.Log.d("NobelApi", "🔑 Token for request: ${token?.take(30)}...")
-
             val response = client.get(url) {
                 token?.let {
                     headers.append(HttpHeaders.Authorization, "Bearer $it")
-                    android.util.Log.d("NobelApi", "✅ Added Authorization header")
                 }
             }
 
-            android.util.Log.d("NobelApi", "Response status: ${response.status.value}")
-
-            // ✅ ТЕПЕРЬ ПОЛУЧАЕМ СРАЗУ ПОЛНЫЕ ДАННЫЕ!
-            val prizes = response.body<List<NobelPrizeDto>>()
-            android.util.Log.d("NobelApi", "Got ${prizes.size} FULL prizes in ONE request!")
-
-            prizes
+            if (response.status.value == 200) {
+                val prizes = response.body<List<NobelPrizeDto>>()
+                android.util.Log.d("NobelApi", "Response: 200 OK - ${prizes.size} prizes")
+                prizes
+            } else {
+                android.util.Log.e("NobelApi", "Response: ${response.status.value} ${response.status.description}")
+                emptyList()
+            }
         } catch (e: Exception) {
-            android.util.Log.e("NobelApi", "Error fetching prizes: ${e.message}", e)
+            android.util.Log.e("NobelApi", "Error: ${e.message}")
             emptyList()
         }
     }
@@ -81,8 +73,6 @@ class NobelApiServiceImpl(
         category: String
     ): NobelPrizeDto? {
         return try {
-            android.util.Log.d("NobelApi", "fetchPrizeByYearAndCategory: $year/$category")
-
             val token = tokenManager.getToken()
             val response = client.get("$baseUrl/prizes/$year/$category") {
                 token?.let {
@@ -90,9 +80,14 @@ class NobelApiServiceImpl(
                 }
             }
 
-            response.body<NobelPrizeDto>()
+            if (response.status.value == 200) {
+                response.body<NobelPrizeDto>()
+            } else {
+                android.util.Log.e("NobelApi", "Response: ${response.status.value} ${response.status.description}")
+                null
+            }
         } catch (e: Exception) {
-            android.util.Log.e("NobelApi", "Error fetching prize $year/$category: ${e.message}", e)
+            android.util.Log.e("NobelApi", "Error: ${e.message}")
             null
         }
     }
